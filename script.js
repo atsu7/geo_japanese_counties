@@ -155,7 +155,7 @@
     document.getElementById('file-input').addEventListener('change', function(e) {
         var file = e.target.files[0];
         if (file) {
-            omnivore.gpx('waypoints.gpx')
+            omnivore.gpx(file)
             .on('ready', function (event) {
                 var gpxLayer = event.target;
                 gpxLayer.eachLayer(function (layer) {
