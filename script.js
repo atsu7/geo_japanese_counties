@@ -152,38 +152,50 @@
     var waypoints = [];
     // ウェイポイントを円で表現
 
-    document.getElementById('file-input').addEventListener('change', function(e) {
+    document.getElementById('file-input').addEventListener('change', function (e) {
         var file = e.target.files[0];
+        console.log(file);
         if (file) {
-            omnivore.gpx(file)
-            .on('ready', function (event) {
-                var gpxLayer = event.target;
-                gpxLayer.eachLayer(function (layer) {
-                    waypoints.push(layer);
-                    // layer.setIcon(customIcon);
-                    // layer.addTo(map);
-                });
-                waypoints.forEach(function (waypoint) {
-                    L.circle(waypoint.getLatLng(), {
-                        color: 'transparent',      // 円の境界線の色
-                        fillColor: 'red', // 円の塗りつぶし色
-                        fillOpacity: 0.5,  // 塗りつぶしの透明度
-                        radius: 160        // 半径（メートル）
-                    }).addTo(map);
-                });
-    
-                if (geojsonLayer) {
-                    geojsonLayer.eachLayer(function (layer) {
-                        waypoints.forEach(function (waypoint) {
-                            if (layer.getBounds().contains(waypoint.getLatLng())) {
-                                layer.setStyle({ color: 'red' });
-                            }
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var data = e.target.result;
+                console.log(data);
+                var blob = new Blob([data], {type: 'application/gpx+xml'});
+                var url = URL.createObjectURL(blob);
+
+                omnivore.gpx(url)
+                    .on('ready', function (event) {
+                        var gpxLayer = event.target;
+                        gpxLayer.eachLayer(function (layer) {
+                            waypoints.push(layer);
+                            // layer.setIcon(customIcon);
+                            // layer.addTo(map);
                         });
+                        waypoints.forEach(function (waypoint) {
+                            L.circle(waypoint.getLatLng(), {
+                                color: 'transparent',      // 円の境界線の色
+                                fillColor: 'red', // 円の塗りつぶし色
+                                fillOpacity: 0.5,  // 塗りつぶしの透明度
+                                radius: 160        // 半径（メートル）
+                            }).addTo(map);
+                        });
+
+                        if (geojsonLayer) {
+                            geojsonLayer.eachLayer(function (layer) {
+                                waypoints.forEach(function (waypoint) {
+                                    if (layer.getBounds().contains(waypoint.getLatLng())) {
+                                        layer.setStyle({ color: 'red' });
+                                    }
+                                });
+                            });
+                        }
                     });
-                }
-            });
-        }
+            }
+            reader.onerror = function() {
+                console.error('ファイルの読み込み中にエラーが発生しました。');
+            };
+            reader.readAsText(file); // GPXファイルをテキストとして読み込む
+            URL.revokeObjectURL(url);
+        };
     });
-
-
 });
