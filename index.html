@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>市町村の境界を表示する地図</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-omnivore/leaflet-omnivore.min.js"></script>
+    <style>
+        #sidebar {
+            height: 100vh; /* 画面の高さ全体を使用 */
+            width: 20%; /* 画面の残り25%の幅を使用 */
+            float: left;
+            overflow-y: auto; /* 必要に応じてスクロールバーを表示 */
+            background-color: #f0f0f0; /* 背景色 */
+            padding: 20px; /* 内側の余白 */
+        }
+        #map {
+            height: 100vh; /* 画面の高さ全体を使用 */
+            width: 75%; /* 画面の75%の幅を使用 */
+            float: right;
+        }
+
+    </style>
+</head>
+<body>
+    <input type="file" id="file-input" accept=".gpx" />
+    <div id="sidebar"></div>
+    <div id="map"></div>
+    <script src="script.js"></script>
+</body>
+</html>
